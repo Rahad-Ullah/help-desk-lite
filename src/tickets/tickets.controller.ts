@@ -1,13 +1,20 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
+import { ITicket } from './tickets.interface';
 
 @Controller('tickets')
 export class TicketsController {
   constructor(private readonly ticketService: TicketsService) {}
 
   @Get()
-  findAll() {
-    return this.ticketService.findAll();
+  findAll(
+    @Query('status') status?: ITicket['status'],
+    @Query('priority') priority?: ITicket['priority'],
+  ) {
+    return this.ticketService.findAll(
+      status as ITicket['status'],
+      priority as ITicket['priority'],
+    );
   }
 
   @Get(':id')

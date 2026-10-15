@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Tickets } from './tickets.interface';
+import { ITicket } from './tickets.interface';
 
 @Injectable()
 export class TicketsService {
-  private readonly tickets: Tickets[] = [
+  private readonly tickets: ITicket[] = [
     {
       id: 1,
       subject: 'Ticket 1',
@@ -22,9 +22,20 @@ export class TicketsService {
     },
   ];
 
-  findAll() {
-    return this.tickets;
+  findAll(status: ITicket['status'], priority: ITicket['priority']) {
+    let tickets = this.tickets;
+
+    if (status) {
+      tickets = tickets.filter((ticket) => ticket.status === status);
+    }
+
+    if (priority) {
+      tickets = tickets.filter((ticket) => ticket.priority === priority);
+    }
+
+    return tickets;
   }
+
   findOne(id: number) {
     const ticket = this.tickets.find((ticket) => ticket.id === id);
     if (!ticket) {
