@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ITicket } from './tickets.interface';
+import { CreateTicketDto } from './dto/create-ticket.dto';
 
 @Injectable()
 export class TicketsService {
@@ -22,6 +23,8 @@ export class TicketsService {
     },
   ];
 
+  private nextId = 3;
+
   findAll(status: ITicket['status'], priority: ITicket['priority']) {
     let tickets = this.tickets;
 
@@ -41,6 +44,20 @@ export class TicketsService {
     if (!ticket) {
       throw new NotFoundException(`Ticket with ID ${id} not found`);
     }
+    return ticket;
+  }
+
+  create(payload: CreateTicketDto) {
+    const ticket: ITicket = {
+      id: this.nextId++,
+      subject: payload.subject,
+      description: payload.description,
+      priority: payload.priority,
+      status: 'open',
+      createdAt: new Date().toISOString(),
+    };
+
+    this.tickets.push(ticket);
     return ticket;
   }
 }

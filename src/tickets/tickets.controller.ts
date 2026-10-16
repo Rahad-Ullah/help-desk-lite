@@ -1,6 +1,15 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { TicketsService } from './tickets.service';
-import { ITicket } from './tickets.interface';
+import type { ITicket } from './tickets.interface';
+import { CreateTicketDto } from './dto/create-ticket.dto';
 
 @Controller('tickets')
 export class TicketsController {
@@ -20,5 +29,10 @@ export class TicketsController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.ticketService.findOne(id);
+  }
+
+  @Post()
+  create(@Body() payload: CreateTicketDto) {
+    return this.ticketService.create(payload);
   }
 }
