@@ -8,22 +8,16 @@ import {
   Query,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
-import type { ITicket } from './tickets.interface';
 import { CreateTicketDto } from './dto/create-ticket.dto';
+import { FilterTicketsQueryDto } from './dto/filter-tickets-query.dto';
 
 @Controller('tickets')
 export class TicketsController {
-  constructor(private readonly ticketService: TicketsService) {}
+  constructor(private readonly ticketService: TicketsService) { }
 
   @Get()
-  findAll(
-    @Query('status') status?: ITicket['status'],
-    @Query('priority') priority?: ITicket['priority'],
-  ) {
-    return this.ticketService.findAll(
-      status as ITicket['status'],
-      priority as ITicket['priority'],
-    );
+  findAll(@Query() filters: FilterTicketsQueryDto) {
+    return this.ticketService.findAll(filters.status, filters.priority);
   }
 
   @Get(':id')

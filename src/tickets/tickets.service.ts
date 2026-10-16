@@ -25,7 +25,7 @@ export class TicketsService {
 
   private nextId = 3;
 
-  findAll(status: ITicket['status'], priority: ITicket['priority']) {
+  findAll(status?: ITicket['status'], priority?: ITicket['priority']) {
     let tickets = this.tickets;
 
     if (status) {
